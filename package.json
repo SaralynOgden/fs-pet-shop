@@ -4,9 +4,13 @@
   "description": "pet-shop",
   "main": "server.js",
   "scripts": {
+    "dev": "./node_modules/.bin/nodemon app.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js"
   },
   "author": "Alex Glassford",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.14.0"
+  }
 }
