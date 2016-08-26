@@ -7,9 +7,9 @@ app.use(require('body-parser').json());
 
 app.get('/pets', getPets)
 app.get('/pets/:index', getSinglePet)
-app.get('/*', handleInvalidInput)
+app.get('/*', getInvalidInput)
 app.post('/pets', postPet)
-app.put('/pets/:index', updatePet)
+app.put('/pets/:index', putPet)
 app.delete('/pets/:index', removePet)
 
 function getPets (req, res, next) {
@@ -17,39 +17,50 @@ function getPets (req, res, next) {
 }
 
 function getSinglePet (req, res, next) {
-  pets[req.params.index] ? (
-  res.status(200).send(pets[req.params.index])) : (
-  res.contentType('text/plain'),
-  res.status(404).send('Not Found'))
+  if(pets[req.params.index]) {
+    res.status(200).send(pets[req.params.index])
+  } else {
+    res.contentType('text/plain'),
+    res.status(404).send({
+      message: 'Not Found',
+      data: req.params.index
+    })
+  }
 }
 
-function handleInvalidInput (req, res, next) {
+function getInvalidInput (req, res, next) {
   (res.status(404).send('Not Found'))
 }
 
 function postPet (req, res, next) {
-  let body = req.body
-  if(!body.age || !body.kind || !body.name) {
-    res.contentType('text/plain')
-    res.status(400).send('Bad Request')
+  let pet = req.body
+  if(!pet.age || !pet.kind || !pet.name) {
+    res.contentType('text/plain').status(400).send({
+      message: 'Bad Request',
+      data: pet,
+      usage: 'name | age | kind'
+    })
   } else {
-    pets.push(body)
+    pets.push(pet)
     res.status(201).send(pets)
   }
 }
 
-function updatePet (req, res) {
-  var index = Number.parseInt(req.params.index);
+function putPet (req, res) {
+  let index = Number.parseInt(req.params.index);
   if (Number.isNaN(index) || index < 0 || index >= pets.length) {
-    return res.status(404).send({
-      message: 'Index of pets not found',
+    return res.contentType('text/plain').status(404).send({
+      message: 'Index of pet not found',
       data: index
     });
   }
-  var pet = req.body;
-  console.log(pet);
-  if (!pet) {
-    return res.sendStatus(400);
+  let pet = req.body;
+  if (!pet.age || !pet.kind || !pet.name) {
+    return res.contentType('text/plain').status(400).send({
+      message: 'Bad Request',
+      data: pet,
+      usage: 'name | age | kind'
+    });
   }
   pets[index] = pet;
   res.send(pet);
