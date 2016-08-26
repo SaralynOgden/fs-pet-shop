@@ -31,7 +31,6 @@ app.post('/pets', function (req, res, next) {
   });
 });
 
-
 app.listen(8000, () => {
   console.log('listening on 8000');
 })
