@@ -81,6 +81,68 @@ app.post('/pets', function(req, res) {
   });
 });
 
+app.put('/pets/:index', function(req, res) {
+  fs.readFile(petsPath, 'utf8', function(readErr, petsJSON) {
+    if (readErr) {
+      console.error(readErr.stack);
+
+      return res.sendStatus(500);
+    }
+
+    const index = req.params.index;
+    const pets = JSON.parse(petsJSON);
+    const petAge = Number(req.body.age);
+    const petKind = req.body.kind;
+    const petName = req.body.name;
+
+    if (!petAge || !petKind || !petName || parseInt(petAge) !== petAge) {
+      return res.sendStatus(400);
+    }
+
+    const pet = { petAge, petKind, petName };
+    pets[index] = pet;
+
+    const newPetsJSON = JSON.stringify(pets);
+
+    fs.writeFile(petsPath, newPetsJSON, function(writeErr) {
+      if (writeErr) {
+        console.error(writeErr.stack);
+
+        return res.sendStatus(500);
+      }
+
+      res.set('Content-Type', 'text/plain');
+      res.send(pet);
+    });
+  });
+});
+
+app.delete('/pets/:index', function(req, res) {
+  fs.readFile(petsPath, function(readErr, petsJSON) {
+    if (readErr) {
+      console.error(readErr.stack);
+
+      return res.sendStatus(500);
+    }
+
+    const pets = JSON.parse(petsJSON);
+    const adoptedPet = pets.splice(req.params.index,1)[0];
+
+    const newPetsJSON = JSON.stringify(pets);
+
+    fs.writeFile(petsPath, newPetsJSON, function(writeErr) {
+      if (writeErr) {
+        console.error(writeErr.stack);
+
+        return res.sendStatus(500);
+      }
+
+      res.set('Content-Type', 'text/plain');
+      res.send(adoptedPet);
+    });
+  });
+});
+
 app.use(function(req, res) {
   res.sendStatus(404);
 });
