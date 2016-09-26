@@ -1,18 +1,41 @@
 {
-  "name": "project",
-  "version": "1.0.0",
-  "description": "pet-shop",
-  "main": "server.js",
+  "name": "fs-pet-store",
+  "version": "0.1.0",
+  "description": "A small server app to demonstrate CRUD over an HTTP API",
+  "main": "restfulExpressServer.js",
   "scripts": {
-    "dev": "./node_modules/.bin/nodemon app.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "lint": "eslint",
+    "start": "nodemon",
+    "test": "mocha"
   },
-  "author": "Alex Glassford",
-  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gSchool/fs-pet-shop.git"
+  },
+  "keywords": [
+    "pet",
+    "store",
+    "crud",
+    "http"
+  ],
+  "author": "Ryan Sobol <contact@ryansobol.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/gSchool/fs-pet-shop/issues"
+  },
+  "homepage": "https://github.com/gSchool/fs-pet-shop#readme",
   "dependencies": {
+    "nodemon": "^1.9.1",
     "body-parser": "^1.15.2",
     "express": "^4.14.0",
     "morgan": "^1.7.0"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "eslint": "^2.12.0",
+    "eslint-config-ryansobol": "^7.3.1",
+    "mocha": "^3.0.2",
+    "mock-fs": "^3.11.0",
+    "supertest": "^2.0.0"
   }
 }
